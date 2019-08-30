@@ -19,6 +19,7 @@ app.use((req, res, next) => {
     }
     next()
 })
+console.log(staticDir)
 app.use('/public', express.static(staticDir));
 app.use('/phantom', function (req, res) {
     const phantom = require('phantom');
@@ -31,7 +32,7 @@ app.use('/phantom', function (req, res) {
             console.info('Requesting', requestData.url);
         });
 
-        await page.open('https://www.baidu.com');
+        await page.open('http://www.baidu.com');
         // const content = await page.property('content');
 
         // console.log(`Page opened with status [${status}].`);
