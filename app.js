@@ -19,7 +19,6 @@ app.use((req, res, next) => {
     }
     next()
 })
-console.log(staticDir)
 app.use('/public', express.static(staticDir));
 app.use('/phantom', function (req, res) {
     const phantom = require('phantom');
@@ -32,15 +31,15 @@ app.use('/phantom', function (req, res) {
             console.info('Requesting', requestData.url);
         });
 
-        await page.open('http://www.baidu.com');
+        await page.open('https://www.baidu.com');
         // const content = await page.property('content');
 
         // console.log(`Page opened with status [${status}].`);
         // console.log(content);
-        await page.evaluateJavaScript(`function() { 
-            document.body.innerHTML = '<div>1231231312316sfdg sfgsf1313<div>'
-            return div
-         }`)
+        // await page.evaluateJavaScript(`function() {
+        //     document.body.innerHTML = '<div>1231231312316sfdg sfgsf1313<div>'
+        //     return div
+        //  }`)
         await page.render('stackoverflow.png');
 
         await instance.exit();
