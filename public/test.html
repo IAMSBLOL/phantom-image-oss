@@ -2,53 +2,59 @@
 <html>
 <head>
 <title>MathJax TeX Test Page</title>
-<!-- <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-</script> -->
+
+
+<script type="text/javascript"  src="../node_modules/mathjax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 <style type="text/css">
     html,body {
         width: 100%;
-        height: 100%;
+        min-width: 750px;
+        background-color: #fff;
         margin: 0;
         padding: 0;
-        /* min-width: 600px;
-        min-height: 480px; */
+        font-size: 14px;
     }
-    #list {
-        width: 100%;
-        background-color: aqua;
-    }
+
+    .MathJye table {
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            vertical-align: middle;
+            line-height: normal;
+            font-size: inherit;
+            _font-size: 100%;
+            font-style: normal;
+            font-weight: normal;
+            border: 0;
+            float: none;
+            display: inline-block;
+            zoom: 0;
+        }
+        #q_answer{display:none;}
+        table.edittable{border-collapse:collapse;text-align:center;margin:2px}table.edittable td,table.edittable th{line-height:30px;padding:5px;white-space:normal;word-break:break-all;border:1px solid #000;vertical-align:middle}table.composition{border-collapse:collapse;text-align:left;margin:2px;width:98%}table.composition td,table.composition th{line-height:30px;white-space:normal;word-break:break-all;border-width:0;vertical-align:middle}table.composition2{border-collapse:collapse;width:auto}table.composition2 td,table.composition2 th{text-align:left;line-height:30px;white-space:normal;word-break:break-all;border:none;border-width:0;vertical-align:middle}
 
 </style>
 </head>
-<script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
-</script>
 <body>
-    <div id='list'>
-        <div id='test1'>
-            112312312312
-            <div>\(\int_a^bf(x)dx'\) 长颈漏斗；\(\rm{2H_{2}O_{2} dfrac { overset{;MnO_{2};}{ .}}{;}2H_{2}O+O_{2}↑}\)；可以控制反应的发生和停止；\(\rm{A}\)</div>
-            <div> 解：\(\rm{(1)}\)长颈漏斗方便加液体药品，故答案为：长颈漏斗；
-               <br />\(\rm{(2)}\)如果用双氧水和二氧化锰制氧气就不需要加热，
-               过氧化氢在二氧化锰做催化剂的条件下生成水和氧气，要注意配平；实验室常用加热氯化铵和氢氧化钙的固体混合物来制取氨气，
-               因此需要加热；故答案为：\(\rm{A}\)； <br />
-               长颈漏斗方便加液体药品，制取装置包括加热和不需加热两种，如果用双氧水和二氧化锰制氧气就不需要加热，如果用高锰酸钾或氯酸钾制氧气就需要加热\(\rm{.}\)
-               氧气的密度比空气的密度大，不易溶于水，因此能用向上排空气法和排水法收集\(\rm{.}\)实验室制取\(\rm{CO_{2}}\)，是在常温下，用大理石或石灰石和稀盐酸制取的，
-               碳酸钙和盐酸互相交换成分生成氯化钙和水和二氧化碳，因此不需要加热\(\rm{.}\)二氧化碳能溶于水，密度比空气的密度大，因此只能用向上排空气法收集\(\rm{.C}\)装置的优点是：
-               可以控制反应的发生和停止；实验室常用加热氯化铵和氢氧化钙的固体混合物来制取氨气，因此需要加热．<br />本考点主要考查了仪器的名称、气体的制取装置和收集装置的选择，
-               同时也考查了化学方程式的书写和装置的优点等，综合性比较强\(\rm{.}\)气体的制取装置的选择与反应物的状态和反应的条件有关；气体的收集装置的选择与气体的密度和溶解
-               性有关\(\rm{.}\)本考点是中考的重要考点之一，主要出现在实验题中．  \(\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}\)
-            </div>
-          
-        </div>
-          
-        </div>
-    </div>
+  
+    const contents = [
+    `<div> 长颈漏斗；\(\rm{2H_{2}O_{2} dfrac { overset{;MnO_{2};}{ .}}{;}2H_{2}O+O_{2}↑}\)；可以控制反应的发生和停止；\(\rm{A}\)</div><div> 解：\(\rm{(1)}\)长颈漏斗方便加液体药品，故答案为：长颈漏斗； <br />\(\rm{(2)}\)如果用双氧水和二氧化锰制氧气就不需要加热，过氧化氢在二氧化锰做催化剂的条件下生成水和氧气，要注意配平；实验室常用加热氯化铵和氢氧化钙的固体混合物来制取氨气，因此需要加热；故答案为：\(\rm{A}\)； <br />长颈漏斗方便加液体药品，制取装置包括加热和不需加热两种，如果用双氧水和二氧化锰制氧气就不需要加热，如果用高锰酸钾或氯酸钾制氧气就需要加热\(\rm{.}\)氧气的密度比空气的密度大，不易溶于水，因此能用向上排空气法和排水法收集\(\rm{.}\)实验室制取\(\rm{CO_{2}}\)，是在常温下，用大理石或石灰石和稀盐酸制取的，碳酸钙和盐酸互相交换成分生成氯化钙和水和二氧化碳，因此不需要加热\\(\\rm{.}\\)二氧化碳能溶于水，密度比空气的密度大，因此只能用向上排空气法收集\\(\\rm{.C}\\)装置的优点是：可以控制反应的发生和停止；实验室常用加热氯化铵和氢氧化钙的固体混合物来制取氨气，因此需要加热．<br />本考点主要考查了仪器的名称、气体的制取装置和收集装置的选择，同时也考查了化学方程式的书写和装置的优点等，综合性比较强\\(\\rm{.}\\)气体的制取装置的选择与反应物的状态和反应的条件有关；气体的收集装置的选择与气体的密度和溶解性有关\\(\\rm{.}\\)本考点是中考的重要考点之一，主要出现在实验题中．</div>`,
+]
 
-    <div onclick="test()">按钮</divdiv>
+\(\int_a^bf(x)dx'\)
+\(\int_a^bf(x)dx'\)
+
+
+
 </body>
-
-
+<script  >
+        MathJax.Hub.Config({
+          tex2jax: {
+            inlineMath: [["$","$"],["\\(","\\)"]]
+          }
+        });
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    </script>
 </html>
