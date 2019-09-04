@@ -6,9 +6,9 @@ const puppeteer = require('puppeteer');
 
 const initPhantomPool = ({
     max = 10,
-    min = 2,
+    min = 4,
     idleTimeoutMillis = 30000,
-    maxUses = 50,
+    maxUses = 5000,
     testOnBorrow = true,
     puppeteerArgs = {},
     validator = () => Promise.resolve(true),
@@ -25,7 +25,7 @@ const initPhantomPool = ({
                 return page
                 // return instance;
             }),
-        destroy: (instance) => instance.exit(),
+        destroy: (instance) => instance.browser().close(),
         validate: (instance) => validator(instance).then(valid => Promise.resolve(valid && (maxUses <= 0 || instance.useCount < maxUses))),
     }
     const config = {

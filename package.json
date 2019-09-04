@@ -18,7 +18,8 @@
     "phantom": "^6.3.0",
     "phantom-pool": "^1.2.2",
     "puppeteer": "^1.19.0",
-    "puppeteer-cluster": "^0.17.0"
+    "puppeteer-cluster": "^0.17.0",
+    "ramda": "^0.26.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
