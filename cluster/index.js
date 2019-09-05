@@ -18,11 +18,11 @@ module.exports = async function () {
 
         const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
         await delay(1000);
-        await page.screenshot({ path: './image/example' + i + '.png', fullPage: true });
+        await page.screenshot({ path: './image/' + i + '.png', fullPage: true });
         console.timeEnd(i)
     });
 
-    console.log(cluster.queue, '??')
+    // console.log(cluster.queue, '??')
     // = cluster
     return cluster
 }

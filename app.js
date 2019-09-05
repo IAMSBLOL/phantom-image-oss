@@ -1,11 +1,8 @@
-/* eslint-disable no-useless-escape */
 
 const express = require('express')
 const path = require('path')
 const app = express();
 
-// const os = require('os')
-// console.log(os.cpus())
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.json({ limit: '10mb' })); // 解析并限定body大小
@@ -15,16 +12,23 @@ const shot = require('./router/screenshot')
 
 require('events').EventEmitter.defaultMaxListeners = 0
 
-// 静态文件目录
+/**
+ * 静态文件目录
+ */
 const staticDir = path.join(__dirname, 'public');
 const nodeModules = path.join(__dirname, 'node_modules');
 app.use('/public', express.static(staticDir));
 app.use('/node_modules', express.static(nodeModules));
 
+/**
+ * 创建资源池
+ */
 const pool = require('./puppeteer_pool/pagePool')
-// CORS
+
+/**
+ * CORS
+ */
 app.use((req, res, next) => {
-    // console.log(req)
     if (req.path !== '/' && !req.path.includes('.')) {
         res.header({
             'Access-Control-Allow-Credentials': true,
@@ -38,11 +42,17 @@ app.use((req, res, next) => {
     next()
 })
 
+/**
+ * options请求粗糙处理。
+ */
 app.route('/').options((req, res, next) => {
     res.send('')
     next()
 });
 
+/**
+ * 智障一样的async，只能把后面要执行的context一起加到微任务
+ */
 (
     async function () {
         let cluster = null;
