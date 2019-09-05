@@ -1,21 +1,28 @@
+
 const { Cluster } = require('puppeteer-cluster');
 
-(async () => {
-    const cluster = await Cluster.launch({
+module.exports = async function () {
+    let cluster = null;
+    cluster = await Cluster.launch({
         concurrency: Cluster.CONCURRENCY_CONTEXT,
         maxConcurrency: 2,
     });
 
-    await cluster.task(async ({ page, data: url }) => {
-        await page.goto(url);
-        const screen = await page.screenshot();
-        // Store screenshot, do something else
+    await cluster.task(async ({ _page, data: { page, c, i } }) => {
+        console.time(i)
+        await page.evaluate(text => {
+            document.body.innerHTML = `${text}`;
+            // MathJax.Hub.Config({ tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] } });
+            MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+        }, c)
+
+        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+        await delay(1000);
+        await page.screenshot({ path: './image/example' + i + '.png', fullPage: true });
+        console.timeEnd(i)
     });
 
-    cluster.queue('http://www.google.com/');
-    cluster.queue('http://www.wikipedia.org/');
-    // many more pages
-
-    await cluster.idle();
-    await cluster.close();
-})();
+    console.log(cluster.queue, '??')
+    // = cluster
+    return cluster
+}

@@ -15,8 +15,10 @@ const initPhantomPool = ({
     ...otherConfig
 } = {}) => {
     // TODO: randomly destroy old instances to avoid resource leak?
+    const browser = puppeteer.launch({ ...puppeteerArgs })
     const factory = {
-        create: () => puppeteer.launch({ ...puppeteerArgs })
+
+        create: () => browser
             .then(async (instance) => {
                 // instance['useCount'] = 0;
                 const page = await instance.newPage()

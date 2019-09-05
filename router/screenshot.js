@@ -1,31 +1,33 @@
 
-const puppeteerPool = require('../puppeteer_pool')
+// const puppeteerPool = require('../puppeteer_pool')
 
-const { Cluster } = require('puppeteer-cluster');
+// const { Cluster } = require('puppeteer-cluster');
 
 const R = require('ramda')
+
+// const fs = require('fs')
 
 // const puppeteer = require('puppeteer');
 
 const replaceSrc = require('../utils')
-const pool = puppeteerPool({
-    max: 16, // 最大资源
-    min: 8, // 空闲保留
-    idleTimeoutMillis: 360000, // default.
-    // maximum number of times an individual resource can be reused before being destroyed; set to 0 to disable
-    maxUses: 0, // default
-    // see https://github.com/coopernurse/node-pool#createpool
-    validator: () => Promise.resolve(true),
-    // validate resource before borrowing; required for `maxUses and `validator`
-    testOnBorrow: true, // default
-    // For all opts, see opts at https://github.com/coopernurse/node-pool#createpool
-    puppeteerArgs: {
-        defaultViewport: {
-            width: 750,
-            height: 1
-        }
-    }, // 提升性能
-})
+// const pool = puppeteerPool({
+//     max: 16, // 最大资源
+//     min: 8, // 空闲保留
+//     idleTimeoutMillis: 360000, // default.
+//     // maximum number of times an individual resource can be reused before being destroyed; set to 0 to disable
+//     maxUses: 0, // default
+//     // see https://github.com/coopernurse/node-pool#createpool
+//     validator: () => Promise.resolve(true),
+//     // validate resource before borrowing; required for `maxUses and `validator`
+//     testOnBorrow: true, // default
+//     // For all opts, see opts at https://github.com/coopernurse/node-pool#createpool
+//     puppeteerArgs: {
+//         defaultViewport: {
+//             width: 750,
+//             height: 1
+//         }
+//     }, // 提升性能
+// })
 
 let contents = [
     `在下面的图形中，根据图下面的分数涂上颜色．<br /><img  src="/upimages/quiz/images/201604/118/a30232f7.png" style="vertical-align:middle" /><div> 长12312312312颈漏斗；\\(\\rm{2H_{2}O_{2} dfrac { overset{;MnO_{2};}{ .}}{;}2H_{2}O+O_{2}↑}\\)；可以控制反应的发生和停止；\\(\\rm{A}\\)</div><div> 解：\\(\\rm{(1)}\\)长颈漏斗方便加液体药品，故答案为：长颈漏斗； <br />\\(\\rm{(2)}\\)如果用双氧水和二氧化锰制氧气就不需要加热，过氧化氢在二氧化锰做催化剂的条件下生成水和氧气，要注意配平；实验室常用加热氯化铵和氢氧化钙的固体混合物来制取氨气，因此需要加热；故答案为：\\(\\rm{A}\\)； <br />长颈漏斗方便加液体药品，制取装置包括加热和不需加热两种，如果用双氧水和二氧化锰制氧气就不需要加热，如果用高锰酸钾或氯酸钾制氧气就需要加热\\(\\rm{.}\\)氧气的密度比空气的密度大，不易溶于水，因此能用向上排空气法和排水法收集\\(\\rm{.}\\)实验室制取\\(\\rm{CO_{2}}\\)，是在常温下，用大理石或石灰石和稀盐酸制取的，碳酸钙和盐酸互相交换成分生成氯化钙和水和二氧化碳，因此不需要加热\\(\\rm{.}\\)二氧化碳能溶于水，密度比空气的密度大，因此只能用向上排空气法收集\\(\\rm{.C}\\)装置的优点是：可以控制反应的发生和停止；实验室常用加热氯化铵和氢氧化钙的固体混合物来制取氨气，因此需要加热．<br />本考点主要考查了仪器的名称、气体的制取装置和收集装置的选择，同时也考查了化学方程式的书写和装置的优点等，综合性比较强\\(\\rm{.}\\)气体的制取装置的选择与反应物的状态和反应的条件有关；气体的收集装置的选择与气体的密度和溶解性有关\\(\\rm{.}\\)本考点是中考的重要考点之一，主要出现在实验题中．</div>`,
@@ -36,34 +38,30 @@ let contents = [
 
 contents = contents.map((o) => replaceSrc(o))
 
-async function shot (req, res, next) {
+async function shot (req, res, next, cluster, pool) {
     res.status(200)
     res.send('成功咯')
     next()
-    // console.log(req)
-    contents = JSON.parse(req.body.content)
+    console.log(cluster, 'queue')
+    contents = JSON.parse(req.body.content);
+    // const cluster = await Cluster.launch({
+    //     concurrency: Cluster.CONCURRENCY_CONTEXT,
+    //     maxConcurrency: 2,
+    // });
 
-    const cluster = await Cluster.launch({
-        concurrency: Cluster.CONCURRENCY_CONTEXT,
-        maxConcurrency: 2,
-    });
+    // await cluster.task(async ({ _page, data: { page, c, i } }) => {
+    //     console.time(i)
+    //     await page.evaluate(text => {
+    //         document.body.innerHTML = `${text}`;
+    //         // MathJax.Hub.Config({ tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] } });
+    //         MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+    //     }, c)
 
-    await cluster.task(async ({ _page, data: { page, c, i } }) => {
-        console.time(i)
-        await page.evaluate(text => {
-            document.body.innerHTML = `${text}`;
-            // MathJax.Hub.Config({ tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] } });
-            MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
-        }, c)
-
-        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-        await delay(1000);
-        // setTimeout(async () => {
-        await page.screenshot({ path: './image/example' + i + '.png', fullPage: true });
-        console.timeEnd(i)
-        // }, 1000)
-        // Store screenshot, do something else
-    });
+    //     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    //     await delay(1000);
+    //     await page.screenshot({ path: './image/example' + i + '.png', fullPage: true });
+    //     console.timeEnd(i)
+    // });
 
     contents.map((o, oi) => {
         const a = R.props(['title', 'optionA', 'optionB', 'optionC', 'optionD', 'optionE'], o).join('</br>');
@@ -71,7 +69,7 @@ async function shot (req, res, next) {
         // console.log(a);
         [a, b].map((c, i) => {
             pool.use(async (page) => {
-                cluster.queue({ page, c, i: oi + '_' + i + '_' })
+                cluster.queue({ page, c, i: o.id + '_' + oi + '_' + i })
             })
         })
     })
