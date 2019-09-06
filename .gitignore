@@ -1,2 +1,5 @@
 node_modules
+worker_threads/upload_thread.js
+
+
 

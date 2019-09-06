@@ -9,6 +9,8 @@ const R = require('ramda')
 
 // const puppeteer = require('puppeteer');
 
+// const config = require('../config');
+
 const replaceSrc = require('../utils')
 
 let contents = [
@@ -46,7 +48,7 @@ async function shot (req, res, next, cluster, pool) {
             R.props(['answer1', 'answer2', 'parse'], o).join('</br>')
         ].map((c, i) => {
             pool.use(async (page) => {
-                cluster.queue({ page, c, i: o.id + '_' + ['content', 'anser'][i] })
+                cluster.queue({ page, c, i: o.id + '_' + ['content', 'anser'][i], id: o.id })
             })
         })
     })

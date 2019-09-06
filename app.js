@@ -55,6 +55,7 @@ app.route('/').options((req, res, next) => {
  */
 (
     async function () {
+        // 进程集群。赶脚没啥楞用咯
         let cluster = null;
         cluster = await require('./cluster')();
 
